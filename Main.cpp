@@ -55,8 +55,7 @@ void Main()
 			
 			if(ex < 0)ef = false;
 		}
-		Rect(P.GetX(),0,50,480).drawFrame();
-		Line(P.GetX(),P.GetY(),ex,P.GetY()).draw();
+		//Rect(P.GetX(),0,50,480).drawFrame();
 		font(ex - P.GetX()).draw(400,20);
 		if(!ef){
 			ef = true;
@@ -65,7 +64,6 @@ void Main()
 			if(em == 1)em+=Random<int>(0,1);
 			difx=Random<int>(Max<int>(10,diff-6),diff)/2.0;
 		}
-		//Circle(Mouse::Pos(), 50).draw({ 255, 0, 0, 127 });
 		Time++;
 		if(!(Time % 120) && diff < 32){
 			diff += 2; 

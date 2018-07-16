@@ -2,11 +2,12 @@
 # include <Siv3D.hpp>
 
 class Player{
-public:
+
 	double x,y,r;
 	double a,dy;
 	int mode;
 	bool alive;
+public:
 	double GetX(){ return x; }
 	double GetY(){ return y; }
 	double GetR(){ return r; }
@@ -28,9 +29,6 @@ public:
 				return false;
 			}
 		}
-		else{
-
-		}
 		return true;
 	}
 	Player(){init();}
@@ -45,4 +43,5 @@ class Enemy{
 		x = 100;
 		y = 400;
 	}
+
 };
