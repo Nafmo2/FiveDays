@@ -1,6 +1,8 @@
 #pragma once
 # include <Siv3D.hpp>
-
+#include <iostream>
+#include <fstream>
+#include <algorithm>
 class Player{
 
 	double x,y,r;
@@ -45,3 +47,31 @@ class Enemy{
 	}
 
 };
+__int64 HighScore;
+bool Ad = false;
+long long int RW(int x){
+	if(Ad)return HighScore;//Admin機能を使ったら弾く
+	std::fstream fs,fe;
+	long long int S[10];
+	fs.open("ranking.txt",std::ios::in);
+	//開けなかった場合 100～60までを書き込んだファイルを作る。
+	if(!fs.is_open()){
+		fs.close();
+		std::fstream fw; fw.open("ranking.txt",std::ios::out | std::ios::trunc);
+		for(int i = 0; i < 5; i++)fw << 100 - i * 10 << std::endl;
+		fw.close();
+		fs.open("ranking.txt",std::ios::in);
+	}
+
+	for(int i = 0; i < 5; i++)fs >> S[i];
+	S[5] = x;
+	//得点順にソート
+	std::sort(S,S + 6);
+	fs.close();
+	fe.open("ranking.txt",std::ios::out | std::ios::trunc);
+	for(int i = 0; i<5; i++)fe << S[5 - i] << std::endl;
+	fe << std::endl;
+	fe.close();
+	HighScore = S[5];
+	return HighScore;
+}

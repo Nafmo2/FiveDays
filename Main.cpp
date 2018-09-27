@@ -4,15 +4,19 @@
 void Main()
 {
 	const Font font(20);
+	const Font Foo(40);
 	double y=400,a=0,dy=0.65,ex=0,ey;
 	double diff = 10,difx=10;
 	int Time = 0,em=0,extra=0;
-	bool mf = false,ef = false;
+	//mf Jump
+	bool mf = false,ef = false,exf=true,rw=false;
 	Circle PC(100,y,20),EC(ex,360,50);
 	Rect ER(ex,380,30,100);
 	Player P;
 	//Graphics::SetBackground(Color(L"#7f7f7f"));
+	Window::SetTitle(L"Jump & Crouch");
 	auto Ene = Color(L"#EE873D");
+	RW(-1);
 	while (System::Update())
 	{
 		if(!Input::KeyR.pressed)font(P.Alive()).draw();
@@ -23,13 +27,16 @@ void Main()
 		}
 		if(!P.Alive()){
 			font(L"Your Score is ",Time+extra).drawCenter(240);
+			RW(Time + extra);
+			rw = false;
 			continue;
 		}
+		exf = true;
 		if(!Input::KeyDown.pressed || mf){
 			PC.y = P.GetY(),PC.r = 20;
-		}
-		else{
+		}else{
 			PC.y=P.GetY()+25,PC.r=10;
+			exf = false;
 		} 
 		PC.draw(Color(L"#FFFFFF"));
 		if(Input::KeyUp.pressed && !Input::KeyDown.pressed && !mf){
@@ -40,7 +47,10 @@ void Main()
 			if(em == 0){
 				EC.x = ex;
 				EC.draw(Ene);
-				if(EC.intersects(PC)){ P.Dead(); }
+				if(EC.intersects(PC)){ 
+					P.Dead();
+					rw = true;
+				}
 			}
 			else{
 				ER.x = ex;
@@ -55,7 +65,7 @@ void Main()
 			
 			if(ex < 0)ef = false;
 		}
-		//Rect(P.GetX(),0,50,480).drawFrame();
+		Rect(P.GetX(),0,50,480).drawFrame();
 		font(ex - P.GetX()).draw(400,20);
 		if(!ef){
 			ef = true;
