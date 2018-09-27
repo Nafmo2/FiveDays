@@ -4,12 +4,14 @@
 void Main()
 {
 	const Font font(20);
+	const Font fox(30);
 	const Font Foo(40);
+	const Texture texture(L"Title.png");
 	double y=400,a=0,dy=0.65,ex=0,ey;
 	double diff = 10,difx=10;
 	int Time = 0,em=0,extra=0;
 	//mf Jump
-	bool mf = false,ef = false,exf=true,rw=false;
+	bool mf = false,ef = false,exf = true,rw = false,mode = true;
 	Circle PC(100,y,20),EC(ex,360,50);
 	Rect ER(ex,380,30,100);
 	Player P;
@@ -19,15 +21,34 @@ void Main()
 	RW(-1);
 	while (System::Update())
 	{
+		if(mode){
+			texture.draw();
+			Time = 0; diff = 10,difx = 10,extra = 0;
+			mf = false,ef = false; P.init();
+			if(Input::KeySpace.pressed)mode = false;
+			continue;
+		}
+		//font(rw).draw(300,0,Palette::Red);
 		if(!Input::KeyR.pressed)font(P.Alive()).draw();
 		else{
-			font(L"Reset Dead").draw(200,210,Palette::White,1.0); P.init(); 
+			//font(L"Reset Dead").draw(200,210,Palette::White,1.0);
+			P.init(); 
 			Time = 0; diff = 10,difx = 10,extra=0;
 			mf = false,ef = false;
 		}
 		if(!P.Alive()){
-			font(L"Your Score is ",Time+extra).drawCenter(240);
-			RW(Time + extra);
+			fox(L"Your Score is ",Time+extra).drawCenter(50,Palette::Aqua);
+			font(L"Retry:Press R-Key! Exit:Press Enter").drawCenter(425);
+			if(rw)RW(Time + extra);
+			TextReader Read(L"ranking.txt",unspecified);
+			for(int i = 1; i <= 5; i++){
+				String st;
+				Read.readLine(st);
+				font(i,L":",st).drawCenter(110 + i * 50);
+			}
+			if(Input::KeyEnter.pressed){
+				mode = true;
+			}
 			rw = false;
 			continue;
 		}
@@ -47,6 +68,7 @@ void Main()
 			if(em == 0){
 				EC.x = ex;
 				EC.draw(Ene);
+				//1と同じ内容。
 				if(EC.intersects(PC)){ 
 					P.Dead();
 					rw = true;
@@ -59,7 +81,11 @@ void Main()
 					extra += 1000;
 					ef = false; 
 				}
-				if(ER.intersects(PC)){ P.Dead(); }
+				//どうじょう
+				if(ER.intersects(PC)){
+					P.Dead(); 
+					rw = true;
+				}
 			}
 			ex -= difx;
 			
